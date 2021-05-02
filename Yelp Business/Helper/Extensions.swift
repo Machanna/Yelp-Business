@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import MapKit
 
 extension UIApplication {
     func endEditing(_ force: Bool) {
@@ -21,6 +20,10 @@ extension UIApplication {
 extension View {
     func resignKeyboardOnDragGesture() -> some View {
         return modifier(ResignKeyboardOnDragGesture())
+    }
+    
+    func hiddenNavigationBarStyle() -> some View {
+        modifier( HiddenNavigationBar() )
     }
 }
 

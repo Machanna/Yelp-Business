@@ -10,42 +10,48 @@ import CoreLocation
 import Combine
 
 class BusinessManager : ObservableObject{
+    
     let yelpBusinessSearchURL = "https://api.yelp.com/v3/businesses/search"
     
+    @Published var loading = true
     @Published var businesses = [Business]()
+    
     var locationManager = LocationManager()
     
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 0
     }
-
+    
     var userLongitude: Double {
         return locationManager.lastLocation?.coordinate.longitude ?? 0
     }
     
+    /**
+     function to subscribe to the LocationManager class to get notified when location retrieval is successful.
+     **/
     private var subscriber: AnyCancellable?
-        init(locationManager: LocationManager) {
-            self.locationManager = locationManager
-            
-            // listen for available location explicitly
-            subscriber = locationManager.$lastLocation
-                .debounce(for: 1, scheduler: DispatchQueue.main) // wait for 5 sec to avoid often reload
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] location in
-                    guard location != nil else { return }
-                    self?.fetchDataWithSearchTerm(term: "")
-                }
-            
-        }
+    init(locationManager: LocationManager) {
+        self.locationManager = locationManager
+        
+        // listen for available location explicitly
+        subscriber = locationManager.$lastLocation
+            .debounce(for: 1, scheduler: DispatchQueue.main) // waiting for a sec to avoid often reload
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] location in
+                /**
+                 1. if location permission is denied or if location is nil,
+                 making the yelp search api web service call with zero coordinate.
+                 2. if location is  not nil,
+                 making the yelp search api web service call with user's current location.
+                 **/
+                self?.fetchDataWithSearchTerm(term: "")
+            }
+        
+    }
     
-//    func fetchData() {
-//
-//        let urlString = "\(yelpBusinessSearchURL)?latitude=\(userLatitude)&longitude=\(userLongitude)"
-//               print(urlString)
-//               performRequest(with: urlString)
-//        subscriber?.cancel()
-//    }
-    
+    /*
+     function to make the yelp search api web service call with user's current location and search term.
+     */
     func fetchDataWithSearchTerm(term: String) {
         var urlString = ""
         if term == ""{
@@ -53,9 +59,15 @@ class BusinessManager : ObservableObject{
         }else{
             urlString = "\(yelpBusinessSearchURL)?term=\(term)&latitude=\(userLatitude)&longitude=\(userLongitude)"
         }
-       
+        
         performRequest(with: urlString)
-        subscriber?.cancel()
+        
+        /*
+          Cancelling the subscription when latitude and longitude are not zero.
+         */
+        if userLatitude != 0 && userLongitude != 0{
+            subscriber?.cancel()
+        }
     }
     
     func performRequest(with urlString: String){
@@ -71,11 +83,12 @@ class BusinessManager : ObservableObject{
                     return
                 }
                 if let safeData = data {
-                   let decoder = JSONDecoder()
+                    let decoder = JSONDecoder()
                     do{
                         let results = try decoder.decode(Results.self, from: safeData)
                         DispatchQueue.main.async {
                             self.businesses = results.businesses
+                            self.loading = false
                         }
                     }catch{
                         print(error)

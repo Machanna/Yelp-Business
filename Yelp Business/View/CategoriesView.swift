@@ -9,13 +9,12 @@ import SwiftUI
 
 struct CategoriesView: View {
     
-    var business : Business
+    var categories : [Category]
     
     var body: some View {
         HStack {
-            ForEach(0..<business.categories.count) { i in
-
-                Text(business.categories[i].title )
+            ForEach(categories, id:\.id) { category in
+                Text(category.title)
                     .font(.caption)
              }
         }

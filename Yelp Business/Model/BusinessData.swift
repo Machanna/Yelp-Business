@@ -23,8 +23,6 @@ struct Business: Codable, Identifiable {
     let categories: [Category]
     let rating: Double
     let coordinates: Center
-    //let transactions: [Transaction]
-    //let price: Price?
     let location: Location?
     let phone, displayPhone: String
     let distance: Double
@@ -42,7 +40,10 @@ struct Business: Codable, Identifiable {
 }
 
 // MARK: - Category
-struct Category: Codable {
+struct Category: Codable, Identifiable {
+    var id: String{
+        return title
+    }
     let alias, title: String
 }
 
@@ -67,16 +68,6 @@ struct Location: Codable {
         case displayAddress = "display_address"
     }
 }
-
-//enum Price: String, Codable {
-//    case empty = "$$"
-//    case price = "$"
-//}
-
-//enum Transaction: String, Codable {
-//    case delivery = "delivery"
-//    case pickup = "pickup"
-//}
 
 // MARK: - Region
 struct Region: Codable {

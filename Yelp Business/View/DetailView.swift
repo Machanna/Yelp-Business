@@ -1,7 +1,7 @@
 //
 //  DetailView.swift
 //  Yelp Business
-//
+//  Second screen to display selected yelp business map from user's location and its details.
 //  Created by Shravya Machanna on 5/1/21.
 //
 
@@ -43,14 +43,11 @@ struct DetailView: View {
                             Text(distance)
                                 .font(.subheadline)
                         }
-                        RatingsView(rating: rating)
+                        RatingsView(rating: rating,reviewCount: business?.reviewCount ?? 0)
                             .padding(EdgeInsets(top: 0, leading: 0, bottom: 3, trailing: 0))
-                        Text(business?.location?.displayAddress[0]  ?? "")
-                            .font(.subheadline)
-                        Text(business?.location?.displayAddress[1]  ?? "")
-                            .font(.subheadline)
-                        Text(business?.displayPhone ?? "")
-                            .font(.subheadline)
+                        SubHeadLineTextView(displayText: business?.location?.displayAddress[0]  ?? "")
+                        SubHeadLineTextView(displayText: business?.location?.displayAddress[1]  ?? "")
+                        SubHeadLineTextView(displayText:business?.displayPhone ?? "")
                             .foregroundColor(.gray)
                         Text(business?.isClosed ?? false ? "Open" : "Closed")
                             .font(.body)
@@ -79,8 +76,4 @@ struct HiddenNavigationBar: ViewModifier {
     }
 }
 
-extension View {
-    func hiddenNavigationBarStyle() -> some View {
-        modifier( HiddenNavigationBar() )
-    }
-}
+

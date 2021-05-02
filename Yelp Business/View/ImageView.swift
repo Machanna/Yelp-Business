@@ -10,20 +10,19 @@ import Combine
 
 struct ImageView: View {
     @ObservedObject var imageLoader:ImageLoader
-    @State var image:UIImage = UIImage()
+    //@State var image:UIImage = UIImage()
 
     init(withURL url:String) {
         imageLoader = ImageLoader(urlString:url)
     }
 
     var body: some View {
-
-            Image(uiImage: image)
+        Image(uiImage: imageLoader.image ?? UIImage() )
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width:60, height:60)
-                .onReceive(imageLoader.didChange) { data in
-                self.image = UIImage(data: data) ?? UIImage()
-        }
+//                .onReceive(imageLoader.didChange) { data in
+//                self.image = UIImage(data: data) ?? UIImage()
+//        }
     }
 }

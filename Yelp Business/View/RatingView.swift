@@ -12,12 +12,14 @@ struct RatingsView: View {
   private static let COLOR = Color.red
 
   let rating: Float
+  let reviewCount: Int
   private let fullCount: Int
   private let emptyCount: Int
   private let halfFullCount: Int
 
-  init(rating: Float) {
+    init(rating: Float, reviewCount: Int) {
     self.rating = rating
+    self.reviewCount = reviewCount
     fullCount = Int(rating)
     emptyCount = Int(RatingsView.MAX_RATING - rating)
     halfFullCount = (Float(fullCount + emptyCount) < RatingsView.MAX_RATING) ? 1 : 0
@@ -25,15 +27,17 @@ struct RatingsView: View {
 
   var body: some View {
     HStack {
-      ForEach(0..<fullCount) { _ in
+      ForEach(0..<fullCount, id: \.self) { _ in
          self.fullStar
        }
-       ForEach(0..<halfFullCount) { _ in
+       ForEach(0..<halfFullCount, id: \.self) { _ in
          self.halfFullStar
        }
-       ForEach(0..<emptyCount) { _ in
+       ForEach(0..<emptyCount, id: \.self) { _ in
          self.emptyStar
        }
+       Text(self.reviewCount > 0 ? String(self.reviewCount) : "")
+        .font(.caption)
      }
   }
 
