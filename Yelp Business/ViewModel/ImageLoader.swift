@@ -44,8 +44,8 @@ class ImageLoader: ObservableObject {
         }
 
         if let url = URL(string: urlString){
-        let task = URLSession.shared.dataTask(with: url, completionHandler: getImageFromResponse(data:response:error:))
-        task.resume()
+            let task = URLSession.shared.dataTask(with: url, completionHandler: getImageFromResponse(data:response:error:))
+            task.resume()
         }
     }
 
