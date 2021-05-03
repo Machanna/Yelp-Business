@@ -49,9 +49,9 @@ struct DetailView: View {
                         SubHeadLineTextView(displayText: business?.location?.displayAddress[1]  ?? "")
                         SubHeadLineTextView(displayText:business?.displayPhone ?? "")
                             .foregroundColor(.gray)
-                        Text(business?.isClosed ?? false ? "Open" : "Closed")
+                        Text(business?.isClosed ?? false ? "Closed" : "Open")
                             .font(.body)
-                            .foregroundColor(business?.isClosed ?? false ? .green : .red)
+                            .foregroundColor(business?.isClosed ?? false ? .red : .green)
                             .padding(EdgeInsets(top: 3, leading: 0, bottom: 5, trailing: 0))
                     }
                     .padding()

@@ -50,7 +50,7 @@ struct ContentView: View {
                         }
                     }
                 }
-            }.navigationBarTitle("Yelp Business")
+            }.navigationBarTitle("Yelp Clone")
             .resignKeyboardOnDragGesture()
         }
     }
